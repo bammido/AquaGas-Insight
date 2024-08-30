@@ -1,21 +1,30 @@
-import dotenv from 'dotenv'
+import { Request, Response } from "express";
+import { app } from "./app";
+import { model } from "./service/geminiModel";
 
-dotenv.config()
-
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-// Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
-
-async function run() {
+async function story() {
   const prompt = "Write a story about an AI and magic"
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
   console.log(text);
+  return text
 }
 
-run();
+app.get('/ping', (req: Request, res: Response) => {
+  res.status(200).send('pong')
+})
+
+app.get('/story', async (req: Request, res: Response) => {
+  try{
+    const text = await story()
+    res.status(200).send(text)
+  } catch (error: any) {
+    res.status(500).send({ error: error.message })
+  }
+})
+
+app.listen(process.env.PORT || process.env.port, () => {
+  console.log(`Server rodando http://localhost:${process.env.port}`);
+})

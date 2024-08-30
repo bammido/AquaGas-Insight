@@ -1,7 +1,18 @@
 version: '3'
 
 services:
-    hml:
+    postgres:
+        image: postgres:14-alpine
+        ports:
+        - "5431:5432"
+        volumes:
+        - ~/apps/postgres:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: "12345"
+            POSTGRES_USER: "postgres"
+            POSTGRES_DB: "aquaGasDB"
+
+    aqua_gas:
         build:
             context: ./
             dockerfile: Dockerfile
@@ -12,4 +23,6 @@ services:
             - ./:/app
             - /app/node_modules
         tty: true
+        depends_on:
+        - postgres
         restart: always
