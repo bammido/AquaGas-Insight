@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import { app } from "./app";
 import { model } from "./service/geminiModel";
+import { measureRouter } from "./routes/measureRoutes";
+
+app.use('/', measureRouter)
 
 async function story() {
-  const prompt = "Write a story about an AI and magic"
+  const prompt = "escreva uma hitória com ia e magia"
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
@@ -25,6 +28,6 @@ app.get('/story', async (req: Request, res: Response) => {
   }
 })
 
-app.listen(process.env.PORT || process.env.port, () => {
-  console.log(`Server rodando http://localhost:${process.env.port}`);
+app.listen(3333, () => {
+  console.log(`Server rodando http://localhost:${3333}`);
 })

@@ -10,7 +10,7 @@ services:
         environment:
             POSTGRES_PASSWORD: "12345"
             POSTGRES_USER: "postgres"
-            POSTGRES_DB: "aquaGasDB"
+            POSTGRES_DB: "postgres"
 
     aqua_gas:
         build:
